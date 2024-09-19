@@ -1,11 +1,24 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from .routes import main
+
+db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    
+    from config import Config
+    app.config.from_object(Config)
 
-    app.register_blueprint(main)
+    # Inizializza CORS prima di registrare i blueprint
+    CORS(app, resources={r"/*": {"origins": "*"}})
+
+    db.init_app(app)
+
+    from app.routes.inserimento_routes import insert_bp
+    app.register_blueprint(insert_bp, url_prefix='/api/')
+
+    from app.routes.lettura_routes import read_bp
+    app.register_blueprint(read_bp)
 
     return app

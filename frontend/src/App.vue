@@ -1,15 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <AppHeader></AppHeader>
+  <LevelBar></LevelBar>
+  <QuestBoard></QuestBoard>
+  <TaskManager></TaskManager>
+  <HabitTracker></HabitTracker>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AppHeader from './components/AppHeader.vue'
+import LevelBar from './components/LevelBar.vue'
+import QuestBoard from './components/QuestBoard.vue'
+import TaskManager from './components/TaskManager.vue'
+import HabitTracker from './components/HabitTracker.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    AppHeader,
+    LevelBar,
+    QuestBoard,
+    TaskManager,
+    HabitTracker
   }
 }
 </script>
