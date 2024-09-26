@@ -11,7 +11,8 @@ def create_app():
     app.config.from_object(Config)
 
     # Inizializza CORS prima di registrare i blueprint
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 
     db.init_app(app)
 
@@ -19,6 +20,6 @@ def create_app():
     app.register_blueprint(insert_bp, url_prefix='/api/')
 
     from app.routes.lettura_routes import read_bp
-    app.register_blueprint(read_bp)
+    app.register_blueprint(read_bp, url_prefix='/api/')
 
     return app

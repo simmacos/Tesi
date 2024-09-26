@@ -1,5 +1,5 @@
 from app import db
-from datetime import date
+from datetime import datetime
 
 class Utenti(db.Model):
     __tablename__ = 'utenti'
@@ -28,7 +28,9 @@ class Tasks(db.Model):
     difficolta_xp = db.Column(db.Integer, nullable=False)
     completata = db.Column(db.Boolean, default=False)
     data_scadenza = db.Column(db.Date)
+    skill = db.Column(db.String(20))
     utenti = db.Column(db.String(50), db.ForeignKey('utenti.Username'))
+    
 
     def __repr__(self):
         return f'<Task {self.titolo}>'
@@ -41,6 +43,7 @@ class Quests(db.Model):
     descrizione = db.Column(db.Text)
     difficolta_xp = db.Column(db.Integer, nullable=False)
     completata = db.Column(db.Boolean, default=False)
+    skill = db.Column(db.String(20))
     utenti = db.Column(db.String(50), db.ForeignKey('utenti.Username'))
 
     def __repr__(self):
@@ -53,8 +56,11 @@ class Habits(db.Model):
     titolo = db.Column(db.String(100), nullable=False)
     descrizione = db.Column(db.Text)
     difficolta_xp = db.Column(db.Integer, nullable=False)
-    attiva = db.Column(db.Boolean, default=True)
+    skill = db.Column(db.String(20))
+    giorni_ripetizione = db.Column(db.String(7), default='1111111')
+    data_creazione = db.Column(db.DateTime, default=datetime.utcnow)
     utenti = db.Column(db.String(50), db.ForeignKey('utenti.Username'))
 
+    
     def __repr__(self):
         return f'<Habit {self.titolo}>'

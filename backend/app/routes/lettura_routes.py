@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify
 from app.utilis import get_today_range
 from app.models import Tasks, Quests, Habits, Utenti
 from sqlalchemy import desc
+from datetime import datetime
+from sqlalchemy import func
 
 read_bp = Blueprint('read', __name__)
 
@@ -16,7 +18,8 @@ def get_all_tasks():
             'difficolta_xp': task.difficolta_xp,
             'completata': task.completata,
             'data_scadenza': task.data_scadenza.isoformat() if task.data_scadenza else None,
-            'utenti': task.utenti
+            'utenti': task.utenti,
+            'skill': task.skill
         } for task in tasks
     ]), 200
 
@@ -36,6 +39,7 @@ def get_tasks():
         'difficolta_xp': task.difficolta_xp,
         'completata': task.completata,
         'data_scadenza': task.data_scadenza.isoformat() if task.data_scadenza else None,
+        'skill': task.skill,
         'Utente': task.utenti
     } for task in tasks]), 200
 
@@ -51,21 +55,37 @@ def get_quests():
         'descrizione': quest.descrizione,
         'difficolta_xp': quest.difficolta_xp,
         'completata': quest.completata,
+        'skill': quest.skill,
         'utenti': quest.utenti
     } for quest in quests]), 200
 
+from datetime import datetime
+
+
 @read_bp.route('/habits', methods=['GET'])
 def get_habits():
-    habits = Habits.query.order_by(desc(Habits.difficolta_xp)).all()
-    
-    return jsonify([{
-        'id': habit.ID,
-        'titolo': habit.titolo,
-        'descrizione': habit.descrizione,
-        'difficolta_xp': habit.difficolta_xp,
-        'attiva': habit.attiva,
-        'utenti': habit.utenti
-    } for habit in habits]), 200
+    try:
+        today = datetime.now().weekday()  # 0 è lunedì, 6 è domenica
+        print(f"Fetching habits for day {today}")
+        
+        habits = Habits.query.filter(
+            func.substring(Habits.giorni_ripetizione, today + 1, 1) == '1'
+        ).order_by(desc(Habits.difficolta_xp)).all()
+        
+        habits_list = [{
+            'id': habit.ID,
+            'titolo': habit.titolo,
+            'descrizione': habit.descrizione,
+            'difficolta_xp': habit.difficolta_xp,
+            'giorni_ripetizione': habit.giorni_ripetizione,
+            'skill': habit.skill,
+            'utenti': habit.utenti
+        } for habit in habits]
+        
+        return jsonify(habits_list), 200
+    except Exception as e:
+        print(f"Error fetching habits: {str(e)}")
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
 @read_bp.route('/user/<username>/general_xp', methods=['GET'])
 def get_general_xp(username):
@@ -127,3 +147,6 @@ def get_creativity_xp(username):
         'creativity_xp': user.creativity_xp
     }), 200
 
+@read_bp.route('/test', methods=['GET'])
+def test_route():
+    return jsonify({"message": "Hello from Flask!"}), 200
