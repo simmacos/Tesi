@@ -17,22 +17,23 @@
       >
       <select 
         v-model="newTask.difficolta_xp" 
-        class="bg-background border border-secondary rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary mr-2 appearance-none cursor-pointer"
+        class="bg-transparent border border-secondary rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary mr-2"
       >
-        <option :value="10" class="text-green-600">Easy</option>
-        <option :value="20" class="text-yellow-600">Medium</option>
-        <option :value="30" class="text-red-600">Hard</option>
+        <option :value="10">Easy</option>
+        <option :value="20">Medium</option>
+        <option :value="30">Hard</option>
       </select>
       <select 
         v-model="newTask.skill" 
-        class="bg-background border border-secondary rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary mr-2 appearance-none cursor-pointer"
+        class="bg-transparent border border-secondary rounded px-2 py-1 text-sm text-text focus:outline-none focus:ring-1 focus:ring-primary mr-2"
       >
-        <option value="GENERAL" class="text-gray-600">GEN</option>
-        <option value="CULTURE" class="text-blue-600">CULT</option>
-        <option value="SPORT" class="text-green-600">SPORT</option>
-        <option value="WELLBEING" class="text-yellow-600">WELL</option>
-        <option value="PRODUCTIVITY" class="text-purple-600">PROD</option>
-        <option value="CREATIVITY" class="text-pink-600">CREA</option>
+        <option value="GENERAL">GEN</option>
+        <option value="CULTURE">CULT</option>
+        <option value="SPORT">SPORT</option>
+        <option value="WELLBEING">WELL</option>
+        <option value="PRODUCTIVITY">PROD</option>
+        <option value="CREATIVITY">CREA</option>
+        <option value="SOCIAL">SOC</option>
       </select>
       <button @click="addTask" class="bg-primary text-background rounded-full w-8 h-8 flex items-center justify-center hover:bg-secondary transition-colors duration-200">
         ➤
@@ -141,13 +142,12 @@ export default {
 
     const toggleTask = async (task) => {
       try {
-        await axios.post(`/api/toggle_task/${task.id}`);
-        task.completata = !task.completata;
         if (task.completata) {
-          await axios.post(`/api/complete_task/${task.id}`);
-        } else {
           await axios.post(`/api/uncomplete_task/${task.id}`);
+        } else {
+          await axios.post(`/api/complete_task/${task.id}`);
         }
+        task.completata = !task.completata;
       } catch (error) {
         console.error('Error toggling task:', error);
       }
@@ -193,6 +193,7 @@ export default {
         case 'WELLBEING': return 'text-yellow-600';
         case 'PRODUCTIVITY': return 'text-purple-600';
         case 'CREATIVITY': return 'text-pink-600';
+        case 'SOCIAL': return 'text-indigo-600';
         default: return 'text-gray-600';
       }
     };

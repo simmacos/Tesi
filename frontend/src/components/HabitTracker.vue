@@ -16,7 +16,7 @@
         <div class="flex items-start">
           <input 
             type="checkbox" 
-            :checked="habit.completedToday" 
+            :checked="habit.completata" 
             @change="toggleHabit(habit)"
             class="form-checkbox h-4 w-4 text-primary rounded border-secondary focus:ring-primary mr-2 mt-1"
           >
@@ -27,9 +27,9 @@
                 {{ getDifficultyLabel(habit.difficolta_xp) }}
               </span>
             </div>
-            <p v-if="habit.descrizione" class="text-xs text-gray-500 line-clamp-1">{{ habit.descrizione }}</p>
+            <p v-if="habit.descrizione" class="text-xs text-gray-500 break-words">{{ habit.descrizione }}</p>
             <div class="flex justify-end mt-1">
-              <span class="text-xs text-secondary font-semibold transition-opacity duration-300 group-hover:opacity-0">{{ habit.skill }}</span>
+              <span class="text-xs text-secondary font-semibold transition-opacity duration-300 group-hover:opacity-0" :class="skillColor(habit.skill)">{{ habit.skill }}</span>
             </div>
           </div>
         </div>
@@ -58,6 +58,7 @@
           <option value="WELLBEING">WELL</option>
           <option value="PRODUCTIVITY">PROD</option>
           <option value="CREATIVITY">CREA</option>
+          <option value="SOCIAL">SOC</option>
         </select>
         <div class="mb-2">
           <p class="mb-1">Repeat on:</p>
@@ -121,10 +122,7 @@ export default {
         const response = await axios.get('/api/habits');
         console.log('Habits response:', response.data);
         if (Array.isArray(response.data)) {
-          this.habits = response.data.map(habit => ({
-            ...habit,
-            completedToday: false
-          }));
+          this.habits = response.data;
         } else {
           console.error('Unexpected response format:', response.data);
           this.habits = [];
@@ -167,19 +165,11 @@ export default {
     },
     async toggleHabit(habit) {
       try {
-        habit.completedToday = !habit.completedToday;
-        
-        if (habit.completedToday) {
-          const response = await axios.post(`/api/complete_habit/${habit.id}`);
-          console.log('Habit completed:', response.data);
-        } else {
-          const response = await axios.post(`/api/uncomplete_habit/${habit.id}`);
-          console.log('Habit uncompleted:', response.data);
-        }
+        const response = await axios.post(`/api/toggle_habit/${habit.id}`);
+        console.log('Habit toggled:', response.data);
+        habit.completata = !habit.completata;
       } catch (error) {
         console.error('Error toggling habit:', error);
-        // Ripristina lo stato originale in caso di errore
-        habit.completedToday = !habit.completedToday;
       }
     },
     difficultyColor(difficolta_xp) {
@@ -196,6 +186,18 @@ export default {
         case 20: return 'MEDIUM';
         case 30: return 'HARD';
         default: return 'UNKNOWN';
+      }
+    },
+    skillColor(skill) {
+      switch (skill) {
+        case 'GENERAL': return 'text-gray-600';
+        case 'CULTURE': return 'text-blue-600';
+        case 'SPORT': return 'text-green-600';
+        case 'WELLBEING': return 'text-yellow-600';
+        case 'PRODUCTIVITY': return 'text-purple-600';
+        case 'CREATIVITY': return 'text-pink-600';
+        case 'SOCIAL': return 'text-indigo-600';
+        default: return 'text-gray-600';
       }
     },
     confirmDeleteHabit(habit) {
@@ -250,13 +252,6 @@ export default {
   box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.5);
 }
 
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 .retro-shadow {
   box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
 }
@@ -271,9 +266,5 @@ export default {
 .group:hover .retro-shadow {
   box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
   transform: translate(1px, 1px);
-}
-
-.group:hover .transition-opacity {
-  opacity: 0;
 }
 </style>

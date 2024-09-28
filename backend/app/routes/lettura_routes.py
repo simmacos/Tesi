@@ -65,9 +65,7 @@ from datetime import datetime
 @read_bp.route('/habits', methods=['GET'])
 def get_habits():
     try:
-        today = datetime.now().weekday()  # 0 è lunedì, 6 è domenica
-        print(f"Fetching habits for day {today}")
-        
+        today = datetime.now().weekday()
         habits = Habits.query.filter(
             func.substring(Habits.giorni_ripetizione, today + 1, 1) == '1'
         ).order_by(desc(Habits.difficolta_xp)).all()
@@ -79,7 +77,8 @@ def get_habits():
             'difficolta_xp': habit.difficolta_xp,
             'giorni_ripetizione': habit.giorni_ripetizione,
             'skill': habit.skill,
-            'utenti': habit.utenti
+            'utenti': habit.utenti,
+            'completata': habit.completata
         } for habit in habits]
         
         return jsonify(habits_list), 200
@@ -91,20 +90,21 @@ def get_habits():
 def get_general_xp(username):
     user = Utenti.query.get_or_404(username)
     return jsonify({
-        'username': user.Username,
         'general_xp': user.general_xp
     }), 200
+
 
 @read_bp.route('/user/<username>/skill_xp', methods=['GET'])
 def get_skill_xp(username):
     user = Utenti.query.get_or_404(username)
     return jsonify({
-        'username': user.Username,
+        'social_xp': user.social_xp,
         'culture_xp': user.culture_xp,
         'sport_xp': user.sport_xp,
         'wellbeing_xp': user.wellbeing_xp,
         'productivity_xp': user.productivity_xp,
-        'creativity_xp': user.creativity_xp
+        'creativity_xp': user.creativity_xp,
+        'social_xp': user.social_xp
     }), 200
 
 @read_bp.route('/user/<username>/culture_xp', methods=['GET'])
@@ -150,3 +150,20 @@ def get_creativity_xp(username):
 @read_bp.route('/test', methods=['GET'])
 def test_route():
     return jsonify({"message": "Hello from Flask!"}), 200
+
+@read_bp.route('/get_latest_quests/<username>', methods=['GET'])
+def get_latest_quests(username):
+    try:
+        quests = Quests.query.filter_by(utenti=username).order_by(desc(Quests.ID)).limit(3).all()
+        quest_list = [{
+            'id': quest.ID,
+            'title': quest.titolo,
+            'description': quest.descrizione,
+            'difficulty': quest.difficolta_xp,
+            'skill': quest.skill,
+            'completed': quest.completata
+        } for quest in quests]
+        return jsonify({'quests': quest_list}), 200
+    except Exception as e:
+        print(f"Error fetching latest quests: {str(e)}")
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
