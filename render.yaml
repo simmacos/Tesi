@@ -4,9 +4,15 @@ services:
     env: python
     buildCommand: |
       # Build backend
-      cd backend && pip install -r requirements.txt && cd ..
+      cd backend && pip install -r requirements.txt
       # Build frontend
-      cd frontend && npm install && npm run build && cd ..
+      cd ../frontend && npm install && npm run build
+      # Ensure directories exist
+      mkdir -p ../backend/app/static
+      mkdir -p ../backend/app/templates
+      # Move frontend build to backend folders
+      mv dist/static/* ../backend/app/static/
+      mv dist/index.html ../backend/app/templates/
     startCommand: cd backend && gunicorn run:app
     envVars:
       - key: PYTHON_VERSION

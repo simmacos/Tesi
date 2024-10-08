@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
@@ -6,7 +6,10 @@ import os
 db = SQLAlchemy()
 
 def create_app():
-    app = Flask(__name__, static_folder='static')
+    app = Flask(__name__, 
+                static_folder='static',
+                static_url_path='/static',
+                template_folder='templates')
     
     from config import Config
     app.config.from_object(Config)
@@ -30,6 +33,6 @@ def create_app():
         if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
             return send_from_directory(app.static_folder, path)
         else:
-            return send_from_directory(app.static_folder, 'index.html')
+            return render_template('index.html')
 
     return app

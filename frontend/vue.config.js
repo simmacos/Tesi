@@ -3,6 +3,8 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   outputDir: '../backend/app/static',
   assetsDir: 'static',
+  publicPath: '/static/',
+  indexPath: '../templates/index.html',
   devServer: {
     proxy: {
       '/api': {
