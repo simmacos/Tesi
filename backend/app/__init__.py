@@ -2,8 +2,10 @@ from flask import Flask, send_from_directory, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__, 
@@ -17,6 +19,7 @@ def create_app():
     CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
     db.init_app(app)
+    migrate.init_app(app, db)
 
     from app.routes.inserimento_routes import insert_bp
     app.register_blueprint(insert_bp, url_prefix='/api/')
@@ -36,3 +39,6 @@ def create_app():
             return render_template('index.html')
 
     return app
+
+# Importa i modelli qui per assicurarti che Flask-Migrate li veda
+from app import models
