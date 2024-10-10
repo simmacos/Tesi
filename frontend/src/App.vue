@@ -29,34 +29,27 @@ export default {
     HabitTracker
   },
   mounted() {
-    // Aggiungi i link per preconnect e preload dinamicamente
-    this.addFontLinks();
+    this.loadFont();
   },
   methods: {
-    addFontLinks() {
-      const head = document.head;
-      
+    loadFont() {
+      // Aggiungi preconnect links
       const preconnectGoogle = document.createElement('link');
       preconnectGoogle.rel = 'preconnect';
       preconnectGoogle.href = 'https://fonts.googleapis.com';
-      head.appendChild(preconnectGoogle);
+      document.head.appendChild(preconnectGoogle);
 
       const preconnectGstatic = document.createElement('link');
       preconnectGstatic.rel = 'preconnect';
       preconnectGstatic.href = 'https://fonts.gstatic.com';
       preconnectGstatic.crossOrigin = 'anonymous';
-      head.appendChild(preconnectGstatic);
+      document.head.appendChild(preconnectGstatic);
 
-      const fontPreload = document.createElement('link');
-      fontPreload.rel = 'preload';
-      fontPreload.as = 'style';
-      fontPreload.href = 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap';
-      head.appendChild(fontPreload);
-
-      const fontStylesheet = document.createElement('link');
-      fontStylesheet.rel = 'stylesheet';
-      fontStylesheet.href = 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap';
-      head.appendChild(fontStylesheet);
+      // Carica il font
+      const link = document.createElement('link');
+      link.href = 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
     }
   }
 }
@@ -71,20 +64,4 @@ body {
   font-family: 'Roboto Slab', serif;
 }
 
-/* Aggiungi questa regola per utilizzare font-display: swap */
-@font-face {
-  font-family: 'Roboto Slab';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/robotoslab/v24/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmb2Rm.woff2) format('woff2');
-}
-
-@font-face {
-  font-family: 'Roboto Slab';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/robotoslab/v24/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjoa4Omb2Rm.woff2) format('woff2');
-}
 </style>
