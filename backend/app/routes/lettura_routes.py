@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from app.utilis import get_today_range
+from app.utils import get_today_range
 from app.models import Tasks, Quests, Habits, Utenti
 from sqlalchemy import desc
 from datetime import datetime

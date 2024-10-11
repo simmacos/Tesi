@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from app.models import Tasks, Quests, Habits, Utenti
-from app.utilis import get_end_of_day, calculate_xp
+from app.utils import get_end_of_day, calculate_xp
 from app import db
 
 insert_bp = Blueprint('insert', __name__)  
