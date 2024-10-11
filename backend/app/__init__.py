@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
 from flask_migrate import Migrate
-from app.utils import start_habit_reset_thread
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -39,8 +38,9 @@ def create_app():
         else:
             return render_template('index.html')
 
-    # Avvia il thread per il reset delle habits
+    # Importa e avvia il thread per il reset delle habits
     with app.app_context():
+        from .utils import start_habit_reset_thread
         start_habit_reset_thread()
 
     return app
