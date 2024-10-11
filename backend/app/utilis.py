@@ -1,4 +1,10 @@
 from datetime import datetime, time
+from app import db
+from app.models import Habits
+import threading
+import time
+
+last_check_date = date.today()
 
 def get_end_of_day():
     now = datetime.now()
@@ -19,3 +25,29 @@ def calculate_xp(difficolta_xp):
         return 40, 20
     else:
         return 0, 0  # Default case, no XP
+
+def check_and_reset_habits():
+    global last_reset_date
+    current_date = date.today()
+    
+    if current_date > last_reset_date:
+        with db.session.begin():
+            habits = Habits.query.filter_by(completata=True).all()
+            for habit in habits:
+                habit.completata = False
+            last_reset_date = current_date
+        print(f"Habits reset on {current_date}")
+
+def run_periodic_check():
+    while True:
+        check_and_reset_habits()
+        # Dormi fino all'inizio della prossima ora
+        now = datetime.now()
+        next_hour = (now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1))
+        sleep_seconds = (next_hour - now).total_seconds()
+        time.sleep(sleep_seconds)
+
+def start_habit_reset_thread():
+    thread = threading.Thread(target=run_periodic_check)
+    thread.daemon = True
+    thread.start()

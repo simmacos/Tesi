@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
 from flask_migrate import Migrate
+from app.utils import start_habit_reset_thread
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -29,7 +30,7 @@ def create_app():
 
     from app.routes.quests_ai_routes import quests_ai_bp
     app.register_blueprint(quests_ai_bp, url_prefix='/api/')
-
+    
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def serve(path):
@@ -37,6 +38,10 @@ def create_app():
             return send_from_directory(app.static_folder, path)
         else:
             return render_template('index.html')
+
+    # Avvia il thread per il reset delle habits
+    with app.app_context():
+        start_habit_reset_thread()
 
     return app
 
