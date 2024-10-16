@@ -38,10 +38,6 @@ def create_app():
         else:
             return render_template('index.html')
 
-    # Importa e avvia il thread per il reset delle habits
-    with app.app_context():
-        from .utils import start_habit_reset_thread
-        start_habit_reset_thread()
 
     return app
 

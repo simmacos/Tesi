@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from app.utils import get_today_range
+from app.utils import get_today_range, check_and_reset_habits
 from app.models import Tasks, Quests, Habits, Utenti
 from sqlalchemy import desc
 from datetime import datetime
@@ -66,6 +66,7 @@ from datetime import datetime
 def get_habits():
     try:
         today = datetime.now().weekday()
+        check_and_reset_habits() 
         habits = Habits.query.filter(
             func.substring(Habits.giorni_ripetizione, today + 1, 1) == '1'
         ).order_by(desc(Habits.difficolta_xp)).all()
