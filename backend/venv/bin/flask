@@ -1,4 +1,6 @@
-#!/home/simma/Documenti/Coding/Tesi/backend/venv/bin/python
+#!/bin/sh
+'''exec' "/home/sima/Documents/Coding/Tesi production/Tesi/backend/venv/bin/python" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

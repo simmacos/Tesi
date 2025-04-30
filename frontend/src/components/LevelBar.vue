@@ -3,7 +3,7 @@
     <!-- Barra di livello principale -->
     <div class="mb-6">
       <div class="flex justify-between items-center mb-2">
-        <span class="text-2xl font-bold text-primary">Livello {{ mainLevel }}</span>
+        <span class="text-2xl font-bold text-primary">Level {{ mainLevel }}</span>
         <span class="text-xl text-text">{{ mainExp }} / {{ mainExpNeeded }} XP</span>
       </div>
       <div class="w-full bg-background rounded-full h-5 border-2 border-primary relative group">

@@ -27,12 +27,35 @@ export default {
     QuestBoard,
     TaskManager,
     HabitTracker
+  },
+  mounted() {
+    this.loadFont();
+  },
+  methods: {
+    loadFont() {
+      // Aggiungi preconnect links
+      const preconnectGoogle = document.createElement('link');
+      preconnectGoogle.rel = 'preconnect';
+      preconnectGoogle.href = 'https://fonts.googleapis.com';
+      document.head.appendChild(preconnectGoogle);
+
+      const preconnectGstatic = document.createElement('link');
+      preconnectGstatic.rel = 'preconnect';
+      preconnectGstatic.href = 'https://fonts.gstatic.com';
+      preconnectGstatic.crossOrigin = 'anonymous';
+      document.head.appendChild(preconnectGstatic);
+
+      // Carica il font
+      const link = document.createElement('link');
+      link.href = 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
   }
 }
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap');
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -40,4 +63,5 @@ export default {
 body {
   font-family: 'Roboto Slab', serif;
 }
+
 </style>

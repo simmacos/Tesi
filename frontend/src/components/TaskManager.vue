@@ -1,6 +1,6 @@
 <template>
   <section class="mb-4 bg-accent bg-opacity-20 shadow-lg rounded-lg p-4 border-2 border-secondary">
-    <h2 class="text-lg font-bold text-primary mb-3">Task Manager</h2>
+    <h2 class="text-lg font-bold text-primary mb-3">Daily tasks</h2>
     
     <!-- Barra di creazione task -->
     <div class="flex items-center bg-background rounded-lg p-2 border border-secondary mb-3">

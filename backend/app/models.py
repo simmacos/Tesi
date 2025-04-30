@@ -61,6 +61,7 @@ class Habits(db.Model):
     giorni_ripetizione = db.Column(db.String(7), default='1111111')
     data_creazione = db.Column(db.DateTime, default=datetime.utcnow)
     utenti = db.Column(db.String(50), db.ForeignKey('utenti.Username'))
+    last_reset_date = db.Column(db.Date, default=datetime.utcnow().date)
     completata = db.Column(db.Boolean, default=False)  # Nuovo campo
 
     def __repr__(self):

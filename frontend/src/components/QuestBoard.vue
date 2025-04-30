@@ -1,7 +1,7 @@
 <template>
   <section class="mb-4 bg-accent bg-opacity-20 shadow-lg rounded-lg p-3 border-2 border-secondary relative">
     <div class="flex justify-between items-center mb-2">
-      <h2 class="text-lg font-bold text-primary">Quest Giornaliere</h2>
+      <h2 class="text-lg font-bold text-primary">Quests</h2>
       <button @click="refreshQuests" 
               class="bg-primary text-background rounded-full w-8 h-8 flex items-center justify-center hover:bg-secondary transition-colors duration-200"
               :class="{ 'animate-spin': isLoading }">

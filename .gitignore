@@ -12,4 +12,11 @@ backend/venv/
 # Python cache files
 backend/__pycache__/
 
+backend/migrations/
+backend/migrations
+
+backend/static/
+
 backend/.env
+
+.env

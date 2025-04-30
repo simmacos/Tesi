@@ -7,7 +7,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       </button>
-      <h1 class="text-4xl font-bold text-primary" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Retro Task Manager</h1>
+      <h1 class="text-4xl font-bold text-primary" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Arcade Achiever</h1>
       <div class="text-text font-semibold">{{ username }}</div>
     </div>
 
